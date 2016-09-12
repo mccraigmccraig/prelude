@@ -212,15 +212,16 @@ Called by `imenu--generic-function'."
       (,(concat
          "("
          (regexp-opt
-          '("def" "lambda" "case" "case+" "import" "export" ":" ":!" ":!!" "undefined" "error" "@ident"
-            "exec" "let" "let%" "if" "cond" "do" "be" "open" "using" "loop" "recur" "comment" "list" "list&" "io" "and" "or"
-            "get@" "set@" "update@" "|>" "|>." "|>%" "_$" "$_" "\\or" "\\" "\\slots" "\\stream&" "\\~" "~" "~@" "\\template" "\\open" "::" "?" "!" "..."
-            "|" "&" "->" "^" "All" "Ex" "Rec"
-            "sig" "struct" "defsig" "defstruct" "deftype"
-            "`" "`'" "'" "defmacro" "defsyntax" "do-template" "with-gensyms"
-            "program" "defclass" "definterface" "jvm-import" "object" "do-to" "with-open" "locking"
-            "as-code"
-            "testing") t)
+          '("def:" "lambda" "case" "import" ":" ":!" ":!!" "undefined" "error" "@ident"
+            "exec" "let" "let%" "if" "cond" "do" "be" "open" "loop" "recur" "comment" "list" "list&" "io" "and" "or"
+            "get@" "set@" "update@" "|>" "|>." "_$" "$_" "\\or" "\\" "\\slots" "\\stream&" "\\=>" "\\~" "\\@" "~" "~@" "\\template" "\\open" "::" "?" "..."
+            "|" "&" "->" "^" "All" "Ex" "Rec" "$" "type"
+            "sig" "struct" "sig:" "struct:" "type:" "poly:" "derived:" "derive"
+            "test:" "infix"
+            "`" "`'" "'" "macro:" "syntax:" "do-template" "with-gensyms"
+            "program:" "class:" "interface:" "object" "jvm-import" "do-to" "with-open" "synchronized" "@class"
+            "actor:"
+            "@doc") t)
          "\\>")
        1 font-lock-builtin-face)
       ; Bool literals
@@ -324,7 +325,7 @@ This function also returns nil meaning don't specify the indentation."
               ((or (eq method 'defun)
                    (and (null method)
                         (> (length function) 3)
-                        (string-match "\\`\\(?:\\S +/\\)?\\(def\\|with-\\)"
+                        (string-match "\\`\\(?:\\S +/\\)?\\(\\w+:\\|with-\\)"
                                       function)))
                (lisp-indent-defform state indent-point))
               ((integerp method)
@@ -351,20 +352,16 @@ This function also returns nil meaning don't specify the indentation."
   (let 'defun)
   (let% 'defun)
   (case 'defun)
-  (case+ 'defun)
   (do 'defun)
   (exec 'defun)
   (be 'defun)
   (if 1)
-  (using 1)
   (cond 0)
   (loop 1)
   (do-template 'defun)
   (All 'defun)
   (Ex 'defun)
   (Rec 'defun)
-  (_$ 1)
-  ($_ 1)
   (sig 'defun)
   (struct 'defun)
   (defsig 'defun)
@@ -374,7 +371,7 @@ This function also returns nil meaning don't specify the indentation."
   (_lux_def 'defun)
   (_lux_case 'defun)
   (_lux_lambda 'defun)
-  (locking 'defun)
+  (synchronized 'defun)
   (program 'defun)
   (definterface 'defun)
   (defclass 'defun)
@@ -383,7 +380,6 @@ This function also returns nil meaning don't specify the indentation."
   (jvm-import 'defun)
   (with-gensyms 'defun)
   (testing 'defun)
-  (as-code 'defun)
   (comment 'defun)
   )
 
